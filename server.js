@@ -1,5 +1,6 @@
 const express = require('express');
 const Pusher = require('pusher');
+const http = require('http');
 
 const app = express();
 app.use(express.json());
@@ -20,7 +21,7 @@ const pusher = new Pusher({
 app.post('/data', (req, res) => {
   const data = req.body;
   pusher.trigger('ogka-channel', 'ogka-data', data);
-  console.log('Veri alindi');
+  console.log('Veri alindi:', JSON.stringify(data).substring(0, 50));
   res.json({ ok: true });
 });
 
