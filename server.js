@@ -1,0 +1,25 @@
+const express = require('express');
+const Pusher = require('pusher');
+
+const app = express();
+app.use(express.json());
+
+const pusher = new Pusher({
+  appId: '2154187',
+  key: '69f9ad5906d1c037ac15',
+  secret: '3322d642d61425ab4698',
+  cluster: 'eu',
+  useTLS: true
+});
+
+app.post('/data', (req, res) => {
+  const data = req.body;
+  pusher.trigger('ogka-channel', 'ogka-data', data);
+  console.log('Veri alindi:', JSON.stringify(data).substring(0, 50));
+  res.json({ ok: true });
+});
+
+app.get('/', (req, res) => res.send('OGKA Server calisiyor'));
+
+const PORT = process.env.PORT || 3000;
+app.listen(PORT, () => console.log('OGKA Server port:', PORT));
