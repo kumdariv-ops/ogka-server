@@ -3,6 +3,11 @@ const Pusher = require('pusher');
 
 const app = express();
 app.use(express.json());
+app.use((req, res, next) => {
+  res.header('Access-Control-Allow-Origin', '*');
+  res.header('Access-Control-Allow-Headers', '*');
+  next();
+});
 
 const pusher = new Pusher({
   appId: '2154187',
@@ -15,7 +20,7 @@ const pusher = new Pusher({
 app.post('/data', (req, res) => {
   const data = req.body;
   pusher.trigger('ogka-channel', 'ogka-data', data);
-  console.log('Veri alindi:', JSON.stringify(data).substring(0, 50));
+  console.log('Veri alindi');
   res.json({ ok: true });
 });
 
