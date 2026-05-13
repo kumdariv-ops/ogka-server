@@ -1,6 +1,5 @@
 const express = require('express');
 const Pusher = require('pusher');
-const http = require('http');
 
 const app = express();
 app.use(express.json());
@@ -21,11 +20,11 @@ const pusher = new Pusher({
 app.post('/data', (req, res) => {
   const data = req.body;
   pusher.trigger('ogka-channel', 'ogka-data', data);
-  console.log('Veri alindi:', JSON.stringify(data).substring(0, 50));
-  res.json({ ok: true });
+  console.log('Veri alindi');
+  res.status(200).json({ ok: true });
 });
 
-app.get('/', (req, res) => res.send('OGKA Server calisiyor'));
+app.get('/', (req, res) => res.status(200).send('OGKA Server calisiyor'));
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => console.log('OGKA Server port:', PORT));
