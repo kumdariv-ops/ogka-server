@@ -27,4 +27,5 @@ app.post('/data', (req, res) => {
 app.get('/', (req, res) => res.status(200).send('OGKA Server calisiyor'));
 
 const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => console.log('OGKA Server port:', PORT));
+const server = app.listen(PORT, '0.0.0.0', () => console.log('OGKA Server port:', PORT));
+server.keepAliveTimeout = 30000;
