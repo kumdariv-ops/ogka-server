@@ -1,13 +1,13 @@
 const express = require('express');
 const Pusher = require('pusher');
-const https = require('https');
 
 const app = express();
-app.use(express.json());
+app.use(express.json({ limit: '10mb' }));
 app.use((req, res, next) => {
   res.header('Access-Control-Allow-Origin', '*');
   res.header('Access-Control-Allow-Headers', '*');
-  res.header('Access-Control-Allow-Methods', '*');
+  res.header('Access-Control-Allow-Methods', 'GET,POST,OPTIONS');
+  if (req.method === 'OPTIONS') return res.status(200).end();
   next();
 });
 
@@ -29,6 +29,7 @@ app.post('/data', (req, res) => {
 });
 
 app.post('/ai', async (req, res) => {
+  console.log('AI istegi alindi');
   try {
     const { messages, system } = req.body;
     const response = await fetch('https://api.anthropic.com/v1/messages', {
@@ -41,6 +42,7 @@ app.post('/ai', async (req, res) => {
       body: JSON.stringify({ model: 'claude-sonnet-4-20250514', max_tokens: 1000, system, messages })
     });
     const data = await response.json();
+    console.log('AI yanit alindi');
     res.json(data);
   } catch(e) {
     console.log('AI hata:', e.message);
